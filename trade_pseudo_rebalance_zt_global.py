@@ -55,10 +55,8 @@ while True:
     price_asset_bull = str(round(bid_bull * Decimal(0.99), 8))
     price_asset_bear = str(round(bid_bear * Decimal(0.99), 8))
     asset = f.asset(API_KEY, SECRET_KEY)
-    asset_bull =Decimal(
-                            asset[symbol_asset_bull]['available']) * round(Decimal(price_asset_bull), 8)
-    asset_bear =Decimal(
-                            asset[symbol_asset_bear]['available']) * round(Decimal(price_asset_bear), 8)
+    asset_bull = Decimal(asset[symbol_asset_bull]['available']) * round(Decimal(price_asset_bull), 8)
+    asset_bear = Decimal(asset[symbol_asset_bear]['available']) * round(Decimal(price_asset_bear), 8)
     print("Asset BULL  =  " f'{asset_bull}')
     print("Asset BEAR  =  " f'{asset_bear}' "\n")
     total_assets = asset_bull + asset_bear
@@ -123,10 +121,10 @@ while True:
         ################################################
         # SELL
         e_trade_bull = executor.submit( f.trade, symbol_trade_bull,  str(1), str(price_bull),  
-                                                                    str(amount_bull),   API_KEY, SECRET_KEY )   
+                                                 str(amount_bull),   API_KEY, SECRET_KEY )   
          # BUY
         e_trade_bear = executor.submit( f.trade, symbol_trade_bear, str(2), str(price_bear),
-                                                                    str(amount_bear), API_KEY, SECRET_KEY )    
+                                                 str(amount_bear), API_KEY, SECRET_KEY )    
         e_trade_bull.result()
         e_trade_bear.result()
         print("    1.    END:    BULL  >  BEAR ",  "\n"*3)
@@ -179,10 +177,10 @@ while True:
         ################################################
         # SELL
         e_trade_bear = executor.submit( f.trade, symbol_trade_bear, str(1), str(price_bear),  
-                                                                    str(amount_bear), API_KEY, SECRET_KEY )
+                                                 str(amount_bear), API_KEY, SECRET_KEY )
         # BUY
         e_trade_bull = executor.submit( f.trade, symbol_trade_bull,   str(2), str(price_bull),   
-                                                                    str(amount_bull),   API_KEY, SECRET_KEY )   
+                                                 str(amount_bull),   API_KEY, SECRET_KEY )   
         e_trade_bear.result()
         e_trade_bull.result()
         print("    2.    END:    BEAR  >  BULL ",  "\n"*3)
