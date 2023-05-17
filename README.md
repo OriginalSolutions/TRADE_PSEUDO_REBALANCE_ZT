@@ -4,7 +4,7 @@
 ---
 
 
-As the name suggests, the project aims to enable:
+As the name suggests, the project aims to, among other things, enable:
 
 1. Sell all or only a portion of the profit on token assets that have increased in price during a given period.
 
