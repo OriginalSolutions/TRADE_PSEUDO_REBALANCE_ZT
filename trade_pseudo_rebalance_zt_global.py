@@ -9,21 +9,21 @@ from config_key import API_KEY, SECRET_KEY
 
 executor = ThreadPoolExecutor(10)
 
-symbol_bull              =  'symbol=DASHBULL_USDT&size=1'
-symbol_bear             =  'symbol=DASHBEAR_USDT&size=1'
-symbol_asset_bull   = "DASHBULL"
-symbol_asset_bear  = "DASHBEAR"
-symbol_trade_bull    = "DASHBULL_USDT"
-symbol_trade_bear  = "DASHBEAR_USDT"
+symbol_bull         =  'symbol=DASHBULL_USDT&size=1'
+symbol_bear         =  'symbol=DASHBEAR_USDT&size=1'
+symbol_asset_bull   =  "DASHBULL"
+symbol_asset_bear   =  "DASHBEAR"
+symbol_trade_bull   =  "DASHBULL_USDT"
+symbol_trade_bear   =  "DASHBEAR_USDT"
 
 multiplier_half_assets   = Decimal(1.25)
-multiplier_surplus          = Decimal(0.5)
-multiplier_trigger            = Decimal(1.0)
+multiplier_surplus       = Decimal(0.5)
+multiplier_trigger       = Decimal(1.0)
 # r.a.a.o.u  !!! - requires available amount of usdt  !!!
-multiplier_buy_bear       = Decimal(0.4)  ##  r.a.a.o.u  !!!
-multiplier_buy_bull         = Decimal(0.4)  ##  r.a.a.o.u  !!!
+multiplier_buy_bear      = Decimal(0.4)  ##  r.a.a.o.u  !!!
+multiplier_buy_bull      = Decimal(0.4)  ##  r.a.a.o.u  !!!
 ##  the amount of usd from the available usdt pool 
-usdt_strategy                 = Decimal(20)    ## usdt available for strategy !!!
+usdt_strategy            = Decimal(20)    ## usdt available for strategy !!!
 
 
 
@@ -40,9 +40,9 @@ while True:
     e_bear = executor.submit(f.bid_ask, (symbol_bear))
     bid_bull, ask_bull = e_bull.result()
     bid_bear, ask_bear = e_bear.result()
-    print("Bid   BULL    =  " f'{bid_bull}')
-    print("Ask  BULL    =  " f'{ask_bull}' "\n")
-    print("Bid   BEAR   =  " f'{bid_bear}')
+    print("Bid  BULL   =  " f'{bid_bull}')
+    print("Ask  BULL   =  " f'{ask_bull}' "\n")
+    print("Bid  BEAR   =  " f'{bid_bear}')
     print("Ask  BEAR   =  " f'{ask_bear}' "\n")
     print(strftime("%D") + f'{" "*2}' + strftime("%H:%M:%S"))
 
@@ -59,12 +59,12 @@ while True:
                             asset[symbol_asset_bull]['available']) * round(Decimal(price_asset_bull), 8)
     asset_bear =Decimal(
                             asset[symbol_asset_bear]['available']) * round(Decimal(price_asset_bear), 8)
-    print("Asset BULL   =  " f'{asset_bull}')
+    print("Asset BULL  =  " f'{asset_bull}')
     print("Asset BEAR  =  " f'{asset_bear}' "\n")
     total_assets = asset_bull + asset_bear
     print("TOTAL ASSETS  =  " f'{total_assets}')
     half_assets = total_assets / int(2)
-    print("Half assets    =  " f'{half_assets}' "\n")
+    print("Half assets   =  " f'{half_assets}' "\n")
     print("\n" * 2)
     
     
@@ -112,20 +112,20 @@ while True:
         ################################################   
         bull_price_derivative  = round(bid_bull * Decimal(1.00), 8)
         amount_bull = round(usdt_sell / bull_price_derivative, 2)   ##  SELL in quantities  
-        price_bull = round(bid_bull * Decimal(0.98), 8)
+        price_bull  = round(bid_bull * Decimal(0.98), 8)
         #
         bear_price_derivative = round(ask_bear * Decimal(1.001), 8)
         amount_bear = round(usdt_buy / bear_price_derivative, 2)    ## BUY in quantities  
-        price_bear = round(ask_bear * Decimal(1.02), 8)
+        price_bear  = round(ask_bear * Decimal(1.02), 8)
         
         ################################################
         # SENDING ORDERS
         ################################################
         # SELL
-        e_trade_bull   =  executor.submit( f.trade, symbol_trade_bull,  str(1), str(price_bull),  
+        e_trade_bull = executor.submit( f.trade, symbol_trade_bull,  str(1), str(price_bull),  
                                                                     str(amount_bull),   API_KEY, SECRET_KEY )   
          # BUY
-        e_trade_bear  = executor.submit( f.trade, symbol_trade_bear, str(2), str(price_bear),
+        e_trade_bear = executor.submit( f.trade, symbol_trade_bear, str(2), str(price_bear),
                                                                     str(amount_bear), API_KEY, SECRET_KEY )    
         e_trade_bull.result()
         e_trade_bear.result()
@@ -145,7 +145,7 @@ while True:
         ################################################        
         ##
         #  1. you can with this solution:
-        usdt_buy =  (trigger - asset_bull) * multiplier_buy_bull   # r.a.a.o.u !!!
+        usdt_buy = (trigger - asset_bull) * multiplier_buy_bull   # r.a.a.o.u !!!
         #
         multiplier_buy_bull *= Decimal(1.2)
         part_of_the_difference = (trigger - half_assets) * Decimal(0.5)
@@ -168,20 +168,20 @@ while True:
         ################################################   
         bear_price_derivative  = round(bid_bear * Decimal(1.00), 8)
         amount_bear = round(usdt_sell / bear_price_derivative, 2)    ## SELL in quantities   
-        price_bear = round(bid_bear * Decimal(0.98), 8)
+        price_bear  = round(bid_bear * Decimal(0.98), 8)
         #
         bull_price_derivative  = round(ask_bull * Decimal(1.001), 8)
         amount_bull = round(usdt_buy / bull_price_derivative, 2)   ##  BUY in quantities  
-        price_bull = round(ask_bull * Decimal(1.02), 8)
+        price_bull  = round(ask_bull * Decimal(1.02), 8)
        
         ################################################
         # SENDING ORDERS
         ################################################
         # SELL
-        e_trade_bear  =  executor.submit( f.trade, symbol_trade_bear, str(1), str(price_bear),  
+        e_trade_bear = executor.submit( f.trade, symbol_trade_bear, str(1), str(price_bear),  
                                                                     str(amount_bear), API_KEY, SECRET_KEY )
         # BUY
-        e_trade_bull   =  executor.submit( f.trade, symbol_trade_bull,   str(2), str(price_bull),   
+        e_trade_bull = executor.submit( f.trade, symbol_trade_bull,   str(2), str(price_bull),   
                                                                     str(amount_bull),   API_KEY, SECRET_KEY )   
         e_trade_bear.result()
         e_trade_bull.result()
